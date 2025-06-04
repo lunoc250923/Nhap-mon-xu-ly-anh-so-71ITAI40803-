@@ -1,1 +1,193 @@
-1
+# Câu 6
+
+# Ảnh 1
+import numpy as np
+import imageio.v2 as iio
+import scipy.ndimage as sn
+import matplotlib.pylab as plt
+import colorsys
+
+#Mean filter
+a = iio.imread('baby.jpeg', mode='L')
+k = np.ones((5, 5)) / 25
+b = sn.convolve(a, k).astype(np.uint8)
+iio.imsave('baby.jpeg', b)
+print(b)
+plt.imshow(b)
+plt.title("Mean Filter")
+plt.show()
+
+#Median Filter
+a1 = iio.imread('baby.jpeg', mode='L').astype(np.uint8) 
+b1 = sn.median_filter(a1, size=5, footprint=None, output=None, mode='reflect',cval=0.0, origin=0)
+iio.imsave('abc.png', b1)
+print(b1)
+plt.imshow(b1)
+plt.title("Median Filter")
+plt.show()
+
+#Max Filter
+a1 = iio.imread('baby.jpeg', mode='L').astype(np.uint8) 
+b2 = sn.maximum_filter(a1, size=5, footprint=None, output=None, mode='reflect', cval=0.0, origin=0)
+iio.imsave('baby.jpeg', b2)
+print(b2)
+plt.imshow(b2)
+plt.title("Max Filter")
+plt.show()
+
+#Min Filter
+a11 = iio.imread('baby.jpeg', mode='L').astype(np.uint8) 
+b3 = sn.minimum_filter(a1, size=5, footprint=None, output=None, mode='reflect', cval=0.0, origin=0)
+iio.imsave('baby.jpeg', b3)
+print(b3)
+plt.imshow(b3)
+plt.title("Min Filter")
+plt.show()
+Kết luận: Max Filter khử nhiễu tốt hơn còn lại thì khử nhiễu không tốt bằng đối với ảnh có tên file " baby.jpeg"
+
+# Câu 7:
+import numpy as np
+import imageio.v2 as iio
+import scipy.ndimage as sn
+import matplotlib.pylab as plt
+import colorsys
+
+a1 = iio.imread('flower.jpeg', mode='L').astype(np.uint8) 
+b2 = sn.maximum_filter(a1, size=5, footprint=None, output=None, mode='reflect', cval=0.0, origin=0)
+iio.imsave('flower1.jpeg', b2)
+print(b2)
+plt.imshow(b2)
+plt.title("Max Filter")
+plt.show()
+
+# Sobel Filter
+import numpy as np
+import imageio.v2 as iio
+import scipy.ndimage as sn
+from skimage import filters
+import matplotlib.pylab as plt
+import colorsys
+
+a = iio.imread('flower.jpeg', mode='L')
+b1 = filters.sobel(a).astype(np.uint8)
+iio.imsave('flower_sobel_filter_edge.png', b1)
+plt.imshow(b1)
+plt.show()
+
+#Prewitt Filter
+import numpy as np
+import imageio.v2 as iio
+import scipy.ndimage as sn
+from skimage import filters
+import matplotlib.pylab as plt
+import colorsys
+
+a = iio.imread('flower.jpeg', mode='L')
+b2 = filters.prewitt(a).astype(np.uint8)
+iio.imsave('flower_prewitt_filter_edge.png', b2)
+plt.imshow(b2)
+plt.show()
+
+#Canny Filter
+import numpy as np
+import imageio.v2 as iio
+import scipy.ndimage as sn
+from skimage import feature
+import matplotlib.pylab as plt
+import colorsys
+
+a1 = iio.imread('flower.jpeg', mode='L').astype(np.uint8)
+b3 = feature.canny(a, sigma=3).astype(np.uint8)
+iio.imsave('flower_canny_filter_edge.png', b3)
+plt.imshow(b3)
+plt.show()
+
+# Laplacian Filter
+import numpy as np
+import imageio.v2 as iio
+import scipy.ndimage as sn
+from skimage import filters
+import matplotlib.pylab as plt
+import colorsys
+
+a = iio.imread('flower.jpeg', mode='L')
+b4 = sn.laplace(a, mode='reflect').astype(np.uint8)
+iio.imsave('flower_laplace_filter_edge_detection.png', b4)
+plt.imshow(b4)
+plt.show()
+
+#Câu 8
+import numpy as np
+import imageio.v2 as iio
+import scipy.ndimage as sn
+import matplotlib.pylab as plt
+import colorsys
+
+# Median Filter
+a1 = iio.imread('balloons_noisy.png', mode='L').astype(np.uint8) 
+b1 = sn.median_filter(a1, size=5, footprint=None, output=None, mode='reflect',cval=0.0, origin=0)
+iio.imsave('balloons_noisy1.png.png', b1)
+print(b1)
+plt.imshow(b1)
+plt.title("Median Filter")
+plt.show()
+
+#Đổi hệ màu RGB
+import numpy as np
+import imageio.v2 as iio
+import matplotlib.pylab as plt
+import colorsys
+
+# Đọc ảnh màu RGB
+
+import numpy as np
+import imageio.v2 as iio
+import matplotlib.pylab as plt
+import colorsys
+
+img = iio.imread('balloons_noisy1.png')
+if len(img.shape) == 2:
+    img = np.stack((img, img, img), axis=-1)
+# Kênh màu
+r = np.clip(img[:, :, 0] * np.random.uniform(0.5, 1.5), 0, 255)
+g = np.clip(img[:, :, 1] * np.random.uniform(0.5, 1.5), 0, 255)
+b = np.clip(img[:, :, 2] * np.random.uniform(0.5, 1.5), 0, 255)
+rgb = np.stack((r, g, b), axis=-1).astype(np.uint8)
+iio.imsave('balloons_noisy1_rgb.png', rgb)
+
+plt.imshow(rgb)
+plt.title('RGB image')
+plt.show()
+
+Câu 9: 
+# Median Filter
+a1 = iio.imread('bird.png', mode='L').astype(np.uint8) 
+b1 = sn.median_filter(a1, size=5, footprint=None, output=None, mode='reflect',cval=0.0, origin=0)
+iio.imsave('bird1.png', b1)
+print(b1)
+plt.imshow(b1)
+plt.title("Median Filter")
+plt.show()
+
+#HSV
+import numpy as np
+import imageio.v2 as iio
+import matplotlib.pylab as plt
+import colorsys
+
+rgb = iio.imread('bird1.png')
+rgb2hsv = np.vectorize(colorsys.rgb_to_hsv)
+h,s,v = rgb2hsv(rgb[:,:,0],rgb[:,:,1],rgb[:,:,2])
+h *=h
+hsv_new = np.stack((h, s, v), axis=-1) * 255
+hsv_new = hsv_new.astype(np.uint8)
+iio.imsave('bird1_HSV.png',hsv_new)
+plt.imshow(hsv_new)
+plt.title("HSV Image")
+plt.show()
+
+
+
+
+
+
