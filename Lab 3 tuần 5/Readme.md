@@ -134,4 +134,26 @@
 - plt.show() : Hiển thị ảnh.
 => Kết Quả: Ảnh xuất ra hình trông như bị nhiễu
 
+#Làm thêm 2 
+1
+- Nhập các thư viện cần thiết cho bài tập.
+- img = Image.open('fruit.jpg').convert('L') : Đọc ảnh và chuyển sang ảnh xám.
+- data = np.array(img) : Chuyển ảnh sang cho numpy xử lý ảnh.
+- bdata = nd.shift(data, (100, 25)) : Tịnh tiến ảnh xám với giá trị được chỉ định.
+- plt.imshow(bdata) : Xuất ảnh sau khi đã được tịnh tiến ảnh 
+- plt.show() : hiển thị ảnh tịnh tiến.
+=> Kết quả: ![ảnh](https://github.com/user-attachments/assets/9b2a943b-a428-4322-a1bf-07f17b9ed04d)
+- V,H = data.shape : Đặt biến V,H lần lượt là chiều cao và chiều rộng cho ảnh
+- M = np.indices ((V, H)) : Tạo bản đồ chỉ số pixel có kích thước ( V,H) và chuyển sang số thực (float)
+- d = 5 / q = 2 * d * np.random.ranf(M.shape) - d : Đặt d = 5 và tạo q làm thay đổi vị trí với ma trận np.random.ranf(M.shape).
+- mp = (M + q).astype(int) : M + q với tạo tọa độ mới và ép về số nguyên.
+- amplitude = 10 : Biên độ sóng.
+- frequency = 30 : Tần số sóng.
+- M[0] += amplitude * np.sin(2 * np.pi * M[1] / frequency) : Tạo ma trận M đồ họa 2D với công thức tính sin trên trục tọa độ X,Y.
+- d1 = nd.map_coordinates(data, mp, order=1, mode='reflect') : Sử dụng để biến đổi hình ảnh theo lưới tọa độ 
+- plt.imshow(d1) : Xuất kết quả ảnh mới
+- plt.show() : Hiển thị ảnh.
+=> Kết quả: ![ảnh](https://github.com/user-attachments/assets/315a27a7-3887-4f25-85e8-7989c37c0039)
+
+2
 
