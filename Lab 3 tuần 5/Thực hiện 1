@@ -63,6 +63,161 @@ plt.imshow(d2)
 plt.show()
 
 1.5
+import numpy as np
+import scipy.ndimage as nd
+import matplotlib.pylab as plt
+from PIL import Image
+import imageio.v2 as iio
+
+
+data = iio.imread('world_cup.jpg', mode='L')
+print(data.shape)
+d1 = nd.binary_dilation(data)
+plt.imshow(d1)
+plt.show()
+
+d2 = nd.binary_dilation(data,interations=3)
+plt.imshow(d2)
+plt.show()
+
+1.6
+import numpy as np
+import scipy.ndimage as nd
+import matplotlib.pylab as plt
+from PIL import Image
+import imageio.v2 as iio
+
+
+data = iio.imread('world_cup.jpg', mode='L')
+print(data.shape)
+V,H = data.shape
+M = np.indices ((V, H))
+
+d = 5
+q = 2*d*np.random.ranf(M.s  hape) - d
+mp = (M + q).astype(int)
+d1 = nd.map_coordinates(data,mp)
+plt.imshow(d1)
+plt.show()
+
+1.7
+import numpy as np
+import scipy.ndimage as nd
+import matplotlib.pylab as plt
+from PIL import Image
+import imageio.v2 as iio
+
+def GeoFun(outcoord):
+    a = 10*np.cos(outcoord[0]/10.0) +outcoord[0]
+    b = 10*np.sin(outcoord[1]/10.0) +outcoord[1]
+    return a, b
+data = iio.imread('world_cup.jpg', mode='L')
+d1 = nd.geometric_transform(data,GeoFun)
+plt.imshow(d1)
+plt.show()
+
+* Làm thêm
+1. 
+import numpy as np
+import imageio.v2 as iio
+import matplotlib.pylab as plt
+
+data = iio.imread('fruit.jpg')
+bmg= data[810:1300, 1480:1850]
+print(data.shape)
+
+iio.imsave('apple.jpg', bmg)
+plt.imshow(bmg)
+plt.show()
+
+2.
+import numpy as np
+import scipy.ndimage as nd
+import matplotlib.pylab as plt
+from PIL import Image
+import imageio.v2 as iio
+
+
+img = Image.open('fruit.jpg').convert('L')
+data = np.array(img)
+bdata = nd.shift(data, (100, 25))
+
+plt.imshow(bdata)  
+plt.show()
+
+3.
+import numpy as np
+import scipy.ndimage as nd
+import matplotlib.pylab as plt
+from PIL import Image
+import imageio.v2 as iio
+
+
+data = iio.imread('fruit.jpg')
+print(data.shape)
+bdata = nd.zoom(data,3)
+print(bdata.shape)
+data2 = nd.zoom (data,(3,3,1))
+print(data2.shape)
+data3 = nd.zoom(data,(0.3,0.3,1))
+plt.imshow(data3)
+plt.show()
+
+4
+import numpy as np
+import scipy.ndimage as nd
+import matplotlib.pylab as plt
+from PIL import Image
+import imageio.v2 as iio
+
+
+data = iio.imread('fruit.jpg')
+print(data.shape)
+d1 = nd.rotate(data,20)
+plt.imshow(d1)
+plt.show()
+
+d2 = nd.rotate(data,40,reshape=False)
+plt.imshow(d2)
+plt.show()
+
+d3 = nd.rotate(data,40,reshape=True)
+plt.imshow(d3)
+plt.show()
+
+5
+import numpy as np
+import scipy.ndimage as nd
+import matplotlib.pylab as plt
+from PIL import Image
+import imageio.v2 as iio
+
+
+data = iio.imread('world_cup.jpg', mode='L')
+print(data.shape)
+d1 = nd.binary_dilation(data)
+plt.imshow(d1)
+plt.show()
+
+d2 = nd.binary_dilation(data, size=(5, 5))
+plt.imshow(d2)
+plt.show()
+
+6
+import numpy as np
+import scipy.ndimage as nd
+import matplotlib.pylab as plt
+from PIL import Image
+import imageio.v2 as iio
+
+def GeoFun(outcoord):
+    a = 10*np.tan(outcoord[0]/10.0) +outcoord[0]
+    b = 10*np.cos(outcoord[1]/10.0) +outcoord[1]
+    return a, b
+data = iio.imread('world_cup.jpg', mode='L')
+d1 = nd.geometric_transform(data,GeoFun)
+plt.imshow(d1)
+plt.show()
 
 
 
