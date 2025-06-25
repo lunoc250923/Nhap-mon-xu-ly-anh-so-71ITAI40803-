@@ -94,7 +94,7 @@ V,H = data.shape
 M = np.indices ((V, H))
 
 d = 5
-q = 2*d*np.random.ranf(M.s  hape) - d
+q = 2*d*np.random.ranf(M.shape) - d
 mp = (M + q).astype(int)
 d1 = nd.map_coordinates(data,mp)
 plt.imshow(d1)
@@ -216,6 +216,35 @@ def GeoFun(outcoord):
     return a, b
 data = iio.imread('world_cup.jpg', mode='L')
 d1 = nd.geometric_transform(data,GeoFun)
+plt.imshow(d1)
+plt.show()
+
+
+# Làm thêm 2
+1
+import numpy as np
+import scipy.ndimage as nd
+import matplotlib.pylab as plt
+from PIL import Image
+import imageio.v2 as iio
+
+
+img = Image.open('fruit.jpg').convert('L')
+data = np.array(img)
+bdata = nd.shift(data, (50, 30))
+plt.imshow(bdata)  
+plt.show()
+
+print(bdata.shape)
+V,H = data.shape
+M = np.indices ((V, H)).astype(float)
+d = 5
+q = 2*d*np.random.ranf(M.shape) - d
+mp = (M + q).astype(int)
+amplitude = 10
+frequency = 30
+M[0] += amplitude * np.sin(2 * np.pi * M[1] / frequency)
+d1 = nd.map_coordinates(data, mp, order=1, mode='reflect')
 plt.imshow(d1)
 plt.show()
 
