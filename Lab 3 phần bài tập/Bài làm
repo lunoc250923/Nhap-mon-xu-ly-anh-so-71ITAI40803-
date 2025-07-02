@@ -12,4 +12,58 @@ plt.imshow(bdata)
 plt.show()
 
 Câu 2: 
+import numpy as np
+import scipy.ndimage as nd
+import imageio.v2 as iio
+import matplotlib.pylab as plt
+
+data = iio.imread('exercise/colorful-ripe-tropical-fruits.jpg')
+duahau = data[300:1150, 1600:]
+duahau[:, :, 1] = np.clip(duahau[:, :, 1] + 60, 0, 255)  # G channel (xanh lá)
+duahau[:, :, 0] = np.clip(duahau[:, :, 0] - 40, 0, 255) 
+iio.imwrite('kiwiex.jpg', duahau)
+plt.imshow(duahau)
+plt.show()
+
+dudu = data[300:800, 100:700]
+dudu[:, :, 0] = np.clip(dudu[:, :, 0] + 80, 0, 255)  
+dudu[:, :, 1] = np.clip(dudu[:, :, 1] - 30, 0, 255) 
+iio.imwrite('kiwiex1.jpg', dudu)
+plt.imshow(dudu)
+plt.show()
+
+Câu 3:
+import numpy as np
+import scipy.ndimage as nd
+import imageio.v2 as iio
+import matplotlib.pylab as plt
+
+# Đọc ảnh và xoay
+data = iio.imread('exercise/quang_ninh.jpg')
+cut = data[:300, 400:650]
+nui = nd.rotate(cut, 45, reshape=False)
+plt.imshow(nui)
+plt.show()
+
+cut1 = data[350:550, 450:650]
+thuyen = nd.rotate(cut1, 45, reshape=False)
+plt.imshow(thuyen)
+plt.show()
+
+Cau 4:
+import numpy as np
+import scipy.ndimage as nd
+import imageio.v2 as iio
+import matplotlib.pylab as plt
+
+# Đọc ảnh và thay đổi kích thước
+data = iio.imread('exercise/pagoda.jpg')
+print(data.shape)
+bdata = nd.zoom(data, (5, 5, 1))  # Phóng to 5x theo chiều cao và rộng, giữ nguyên kênh màu
+print(bdata.shape)
+plt.imshow(bdata)
+plt.show()
+
+Câu 5:
+
 
