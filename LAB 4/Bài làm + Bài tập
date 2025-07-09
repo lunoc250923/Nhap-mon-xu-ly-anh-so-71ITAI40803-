@@ -18,19 +18,172 @@
 - plt.show(): Hiển thị cửa sổ chứa ảnh đã xử lý.
 
 #2.2
-Nhập các thư viện cần thiết để xử lý ảnh, phân đoạn và hiển thị kết quả.
-data = cv2.imread('fruit.jpg'): Mở ảnh màu 'fruit.jpg' bằng OpenCV.
-a = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY): Chuyển ảnh từ màu sang ảnh xám để dễ xử lý.
-thresh, bl = cv2.threshold(...): Áp dụng phương pháp Otsu để nhị phân hóa ảnh — tách foreground (vật thể) khỏi background. Sử dụng cv2.THRESH_BINARY_INV để đảo màu (vật thể màu trắng).
-b2 = cv2.erode(bl, None, iterations = 2): Thực hiện phép co (erosion) để loại bỏ các chi tiết nhỏ và tách các vùng gần nhau.
-dist = cv2.distanceTransform(b2, 2, 3): Tính toán khoảng cách từ mỗi pixel vật thể đến pixel nền gần nhất. Dùng để xác định vùng "lõi" của vật thể.
-thresh, dt = cv2.threshold(dist, 1, 255, cv2.THRESH_BINARY): Áp ngưỡng lên ảnh khoảng cách để xác định vùng foreground chắc chắn.
-labelled, ncc = label(dt): Gán nhãn cho các vùng foreground riêng biệt để phân biệt chúng.
-labelled = labelled.astype(np.int32): Chuyển định dạng dữ liệu sang số nguyên 32-bit để phục vụ thuật toán Watershed.
-cv2.watershed(data, labelled): Áp dụng thuật toán tách vùng Watershed để phân vùng các vật thể chạm nhau.
-b = Image.fromarray(labelled): Chuyển ảnh sau phân đoạn thành định dạng ảnh để hiển thị.
-plt.imshow(b): Hiển thị ảnh đã gán nhãn phân vùng bằng thư viện matplotlib.
-plt.show(): Mở cửa sổ hiển thị ảnh.
+import cv2
+from PIL import Image
+import numpy as np
+import imageio.v2 as iio
+import scipy.ndimage as nd
+from scipy.ndimage import label
+import matplotlib.pylab as plt
+from skimage.filters import threshold_local
+
+# opening the image and converting it to grayscale
+data = cv2.imread('fruit.jpg')
+
+# converting image from color to grayscale
+a = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY)
+
+# thresholding the image to obtain cell pixels
+thresh, bl = cv2.threshold(a, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+
+# since Otsu's method has over segmented the image
+# erosion operation is performed
+b2 = cv2.erode(bl, None, iterations = 2)
+
+# distance transform is performed
+dist = cv2.distanceTransform(b2, 2, 3)
+
+# thresholding the distance transform image to obtain
+# pixels that are foreground
+thresh, dt = cv2.threshold(dist, 1, 255, cv2.THRESH_BINARY)
+
+# performing labeling
+labelled, ncc = label(dt)
+
+# labelled is converted to 32-bit integer
+labelled = labelled.astype(np.int32)
+
+# performing watershed
+cv2.watershed(data, labelled)
+
+b = Image.fromarray(labelled)
+
+plt.imshow(b)
+plt.show()
+
+
+#2.3.1
+import cv2
+from PIL import Image
+import numpy as np
+import imageio.v2 as iio
+import scipy.ndimage as nd
+from scipy.ndimage import label
+import matplotlib.pylab as plt
+from skimage.filters import threshold_local
+
+# opening the image and converting it to grayscale
+data = Image.open('dil_img.gif').convert('L')
+b = nd.binary_dilation(data, iterations=50)
+
+c = Image.fromarray(b)
+c.show()
+plt.imshow(c)
+plt.show()
+
+#2.3.2
+import cv2
+from PIL import Image
+import numpy as np
+import imageio.v2 as iio
+import scipy.ndimage as nd
+import matplotlib.pylab as plt
+from skimage.filters import threshold_local
+
+# opening the image and converting it to grayscale
+data = Image.open('dil_img.gif').convert('L')
+# defining the structuring element
+s = [[0, 1, 0], [1, 1, 1], [0, 1, 0]]
+b = nd.binary_opening(data, structure=s, iterations=25)
+
+c = Image.fromarray(b)
+c.show()
+plt.imshow(c)
+plt.show()
+
+#2.3.3
+import cv2
+from PIL import Image
+import numpy as np
+import imageio.v2 as iio
+import scipy.ndimage as nd
+from scipy.ndimage import label
+import matplotlib.pylab as plt
+from skimage.filters import threshold_local
+
+# opening the image and converting it to grayscale
+data = Image.open('dil_img.gif').convert('L')
+
+# defining the structuring element
+s = [[0, 1, 0], [1, 1, 1], [0, 1, 0]]
+b = nd.binary_erosion(data, structure=s, iterations=50)
+
+c = Image.fromarray(b)
+c.show()
+plt.imshow(c)
+plt.show()
+
+#2.3.4
+import cv2
+from PIL import Image
+import numpy as np
+import imageio.v2 as iio
+import scipy.ndimage as nd
+from scipy.ndimage import label
+import matplotlib.pylab as plt
+from skimage.filters import threshold_local
+
+# opening the image and converting it to grayscale
+data = Image.open('dil_img.gif').convert('L')
+
+# defining the structuring element
+s = [[0, 1, 0], [1, 1, 1], [0, 1, 0]]
+b = nd.binary_closing(data, structure=s, iterations=50)
+
+c = Image.fromarray(b)
+c.show()
+plt.imshow(c)
+plt.show()
+
+##Bài tập
+#1
+from PIL import Image
+import numpy as np
+import scipy.ndimage as nd
+from skimage.filters import threshold_otsu
+import matplotlib.pyplot as plt
+
+data = Image.open('exercise/dalat.jpg').convert('L')
+bmg = np.array(data)[0:350, 0:500]
+shifted = np.zeros_like(bmg)
+shifted[:, 100:] = bmg[:, :-100]
+thres = threshold_otsu(shifted)
+b = shifted > (thres * 0.3)
+c = Image.fromarray(b.astype(np.uint8) * 255)
+c.save("lang_biang.jpg")
+plt.imshow(c)
+plt.title("LangBiang")
+plt.show()
 
 #2
+from PIL import Image
+import numpy as np
+import scipy.ndimage as nd
+from skimage.filters import threshold_local
+import matplotlib.pyplot as plt
+
+data = Image.open('exercise/dalat.jpg').convert('L')
+data = np.asarray(data)
+bmg = data[0:2000, 0:2000]
+rotated = nd.rotate(bmg, 45, reshape=True)
+thresh = threshold_local(rotated, block_size=39, offset=60)
+b = rotated > thresh
+c = Image.fromarray(b.astype(np.uint8) * 255)
+c.save("ho_xuan_huong.jpg")
+plt.imshow(c)
+plt.show()
+
+#3
+
+
 
