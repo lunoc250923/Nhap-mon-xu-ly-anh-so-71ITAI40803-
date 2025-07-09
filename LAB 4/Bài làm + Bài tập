@@ -7,7 +7,30 @@
 - b = Image.fromarray(b) : Chuyển ảnh nhị phân từ mảng NumPy sang ảnh kiểu PIL.
 - plt.imshow(b) : Hiển thị ảnh nhị phân bằng thư viện matplotlib.
 - plt.show() : Thực hiện việc hiển thị cửa sổ chứa ảnh đã được xử lý.
-=> Kết quả: 
 
 #2.1.2
+- Nhập các thư viện cần thiết để xử lý ảnh và hiển thị ảnh.
+- data = Image.open('fruit.jpg').convert('L'): Mở ảnh 'fruit.jpg' và chuyển sang ảnh xám với mức xám từ 0 đến 255.
+- a = np.asarray(data): Chuyển ảnh thành mảng NumPy 2D để dễ dàng xử lý bằng toán học.
+- b = threshold_local(a, 39, offset=10): Áp dụng ngưỡng cục bộ (local thresholding) với cửa sổ kích thước 39x39 và độ lệch ngưỡng là 10 để xử lý ảnh. Mỗi vùng nhỏ trong ảnh sẽ có ngưỡng khác nhau, giúp xử lý tốt hơn khi ánh sáng không đều.
+- b = Image.fromarray(b): Chuyển mảng kết quả từ NumPy trở lại ảnh dạng PIL.
+- plt.imshow(b): Hiển thị ảnh kết quả bằng thư viện matplotlib.
+- plt.show(): Hiển thị cửa sổ chứa ảnh đã xử lý.
+
+#2.2
+Nhập các thư viện cần thiết để xử lý ảnh, phân đoạn và hiển thị kết quả.
+data = cv2.imread('fruit.jpg'): Mở ảnh màu 'fruit.jpg' bằng OpenCV.
+a = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY): Chuyển ảnh từ màu sang ảnh xám để dễ xử lý.
+thresh, bl = cv2.threshold(...): Áp dụng phương pháp Otsu để nhị phân hóa ảnh — tách foreground (vật thể) khỏi background. Sử dụng cv2.THRESH_BINARY_INV để đảo màu (vật thể màu trắng).
+b2 = cv2.erode(bl, None, iterations = 2): Thực hiện phép co (erosion) để loại bỏ các chi tiết nhỏ và tách các vùng gần nhau.
+dist = cv2.distanceTransform(b2, 2, 3): Tính toán khoảng cách từ mỗi pixel vật thể đến pixel nền gần nhất. Dùng để xác định vùng "lõi" của vật thể.
+thresh, dt = cv2.threshold(dist, 1, 255, cv2.THRESH_BINARY): Áp ngưỡng lên ảnh khoảng cách để xác định vùng foreground chắc chắn.
+labelled, ncc = label(dt): Gán nhãn cho các vùng foreground riêng biệt để phân biệt chúng.
+labelled = labelled.astype(np.int32): Chuyển định dạng dữ liệu sang số nguyên 32-bit để phục vụ thuật toán Watershed.
+cv2.watershed(data, labelled): Áp dụng thuật toán tách vùng Watershed để phân vùng các vật thể chạm nhau.
+b = Image.fromarray(labelled): Chuyển ảnh sau phân đoạn thành định dạng ảnh để hiển thị.
+plt.imshow(b): Hiển thị ảnh đã gán nhãn phân vùng bằng thư viện matplotlib.
+plt.show(): Mở cửa sổ hiển thị ảnh.
+
+#2
 
