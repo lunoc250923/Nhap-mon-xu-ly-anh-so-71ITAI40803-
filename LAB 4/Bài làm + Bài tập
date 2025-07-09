@@ -1,1 +1,13 @@
+#2.1.1
+- Nhập các thư viện cần thiết cho xử lý ảnh và hiển thị ảnh.
+- data = Image.open('fruit.jpg').convert('L') : Mở ảnh 'fruit.jpg' và chuyển sang ảnh xám (grayscale) với giá trị pixel từ 0 đến 255.
+- a = np.asarray(data) : Chuyển ảnh xám thành mảng 2D để tiện xử lý bằng các thư viện số học như NumPy.
+- thres = threshold_otsu(a) : Tính ngưỡng phân tách nhị phân tự động bằng thuật toán Otsu.
+- b = a > thres : Tạo ảnh nhị phân bằng cách so sánh mỗi pixel với ngưỡng vừa tìm được — pixel nào lớn hơn sẽ là True (trắng), còn lại là False (đen).
+- b = Image.fromarray(b) : Chuyển ảnh nhị phân từ mảng NumPy sang ảnh kiểu PIL.
+- plt.imshow(b) : Hiển thị ảnh nhị phân bằng thư viện matplotlib.
+- plt.show() : Thực hiện việc hiển thị cửa sổ chứa ảnh đã được xử lý.
+=> Kết quả: 
+
+#2.1.2
 
