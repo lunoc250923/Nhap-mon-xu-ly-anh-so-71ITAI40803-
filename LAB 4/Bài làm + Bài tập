@@ -184,6 +184,95 @@ plt.imshow(c)
 plt.show()
 
 #3
+from PIL import Image
+import numpy as np
+import scipy.ndimage as nd
+import matplotlib.pyplot as plt
 
+data = Image.open('exercise/dalat.jpg').convert('L')
+data = np.asarray(data)
+bmg = data[0:350, 1000:1500]
+scaled = nd.zoom(bmg, zoom=(0.8, 0.8))
+mapped = np.zeros_like(bmg)
+sx, sy = scaled.shape
+mapped[:sx, 50:50 + sy] = scaled
+binary = mapped > 128
+s = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
+b = nd.binary_closing(binary, structure=s, iterations=20)
+c = Image.fromarray(b.astype(np.uint8) * 255)
+c.save("quan_truong_lam_vien.jpg")
+plt.imshow(c)
+plt.show()
+
+#4
+from PIL import Image
+import numpy as np
+import scipy.ndimage as nd
+from skimage.filters import threshold_otsu, threshold_local
+import matplotlib.pyplot as plt
+
+def xu_ly_langbiang():
+    data = Image.open('exercise/dalat.jpg').convert('L')
+    bmg = np.array(data)[0:350, 0:500]
+    shifted = np.zeros_like(bmg)
+    shifted[:, 100:] = bmg[:, :-100]
+    thres = threshold_otsu(shifted)
+    b = shifted > (thres * 0.3)
+    c = Image.fromarray(b.astype(np.uint8) * 255)
+    c.save("lang_biang.jpg")
+    plt.imshow(c, cmap='gray')
+    plt.title("LangBiang")
+    plt.show()
+
+def xu_ly_ho_xuan_huong():
+    data = Image.open('exercise/dalat.jpg').convert('L')
+    data = np.asarray(data)
+    bmg = data[0:2000, 0:2000]
+    rotated = nd.rotate(bmg, 45, reshape=True)
+    thresh = threshold_local(rotated, block_size=39, offset=60)
+    b = rotated > thresh
+    c = Image.fromarray(b.astype(np.uint8) * 255)
+    c.save("ho_xuan_huong.jpg")
+    plt.imshow(c, cmap='gray')
+    plt.title("Hồ Xuân Hương")
+    plt.show()
+
+def xu_ly_quangtruong():
+    data = Image.open('exercise/dalat.jpg').convert('L')
+    data = np.asarray(data)
+    bmg = data[0:350, 1000:1500]
+    scaled = nd.zoom(bmg, zoom=(0.8, 0.8))
+    mapped = np.zeros_like(bmg)
+    sx, sy = scaled.shape
+    mapped[:sx, 50:50 + sy] = scaled
+    binary = mapped > 128
+    s = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
+    b = nd.binary_closing(binary, structure=s, iterations=20)
+    c = Image.fromarray(b.astype(np.uint8) * 255)
+    c.save("quan_truong_lam_vien.jpg")
+    plt.imshow(c, cmap='gray')
+    plt.title("Quảng trường Lâm Viên")
+    plt.show()
+
+# Menu 
+while True:
+    print("\n===== MENU XỬ LÝ ẢNH ĐÀ LẠT =====")
+    print("1. Phân vùng LangBiang (Otsu + dịch ảnh)")
+    print("2. Xử lý Hồ Xuân Hương (xoay + adaptive threshold)")
+    print("3. Xử lý Quảng trường Lâm Viên (co ảnh + closing)")
+    print("0. Thoát")
+    choice = input("Nhập lựa chọn của bạn: ")
+
+    if choice == '1':
+        xu_ly_langbiang()
+    elif choice == '2':
+        xu_ly_ho_xuan_huong()
+    elif choice == '3':
+        xu_ly_quangtruong()
+    elif choice == '0':
+        print("Chương trình kết thúc.")
+        break
+    else:
+        print("Lựa chọn không hợp lệ. Vui lòng thử lại.")
 
 
